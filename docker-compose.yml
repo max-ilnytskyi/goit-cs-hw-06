@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: front_app
+    ports:
+      - "3000:3000"
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:8
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data_m_i:/data/db
+
+volumes:
+  mongo_data_m_i:

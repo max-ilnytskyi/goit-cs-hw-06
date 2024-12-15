@@ -38,7 +38,7 @@
     </header>
     <div class="container mt-3">
       <main class="form-signin w-50 m-auto">
-        <form action="/message" method="POST">
+        <form id="messageForm" action="/message" method="POST">
           <h1 class="h3 mb-3 fw-normal">Please send me message</h1>
 
           <div class="row mb-3">
@@ -55,7 +55,34 @@
             Send
           </button>
         </form>
+        <div id="responseMessage" class="mt-3"></div>
       </main>
     </div>
+    <script>
+      document.getElementById("messageForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+    
+        const formData = new URLSearchParams(new FormData(event.target)).toString();
+        const responseMessage = document.getElementById("responseMessage");
+    
+        try {
+            const response = await fetch("/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData,
+            });
+    
+            if (response.ok) {
+                responseMessage.innerHTML = '<div>Message sent successfully!</div>';
+            } else {
+                responseMessage.innerHTML = '<div>Failed to send message. Please try again.</div>';
+            }
+        } catch (error) {
+            responseMessage.innerHTML = '<div>An error occurred. Please try again.</div>';
+        }
+      });
+    </script>
   </body>
 </html>
